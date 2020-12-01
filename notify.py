@@ -8,6 +8,7 @@ icon_path = os.path.join(
 
 def notify(title, message,
            subtitle='', sound=nc['sound'],
+           open=nc['open'],
            activate=nc['activate'],
            icon=icon_path):
     '''https://github.com/julienXX/terminal-notifier'''
@@ -18,9 +19,10 @@ def notify(title, message,
     icon = f'-appIcon "{icon}"'
     activate = f'-activate "{activate}"'
     sound = f'-sound "{sound}"'
+    open = '' if open == '' else f'-open "{open}"'
 
-    cmd = '/usr/local/Cellar/terminal-notifier/2.0.0/terminal-notifier.app/Contents/MacOS/terminal-notifier {} '.format(
-        ' '.join([m, t, s, icon, activate, sound]))
+    cmd = '{} {} '.format(nc['app_path'],
+                          ' '.join([m, t, s, icon, activate, open, sound]))
     os.system(cmd)
 
 
