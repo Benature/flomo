@@ -1,4 +1,4 @@
-<a href="https://flomoapp.com/"><img src="./logo-192x192.png" height="100" align="right"></a>
+<a href="https://flomoapp.com/"><img src="./media/logo-192x192.png" height="100" align="right"></a>
 
 # [flomo](https://flomoapp.com/)
 
@@ -10,6 +10,7 @@
 - 按模板创建 memo (inspired by [即刻@阿粒](https://m.okjike.com/originalPosts/5fc648d8c463ad00188e917a?s=ewoidSI6ICI1ZWUxZDQ1OGY5MmZiYzAwMTc3NWMwZTgiCn0=))
 
 > *prefer python3.7+*
+> 欢迎 Star 🌟、Fork 🍴、Issue 💬、PR. 一起让 flomo 用的更加得心应手
 
 ## Usage 使用
 
@@ -42,7 +43,14 @@
 
 ### Alfred (macOS)
 
-...待补充
+[workflow 下载](https://github.com/Benature/flomo/releases/download/v0.0.2-alpha/flomo.alfredworkflow)
+
+代码没有放在 workflow 里面，需要根据各位电脑稍做适配:  
+在 `Run Script` 中
+
+- `python` 命令需要修改为电脑中 `python3` 的路径 (eg. `/Users/xxx/miniconda3/bin/python.app`)
+- `.py` 文件的**绝对路径**修改为仓库所在路径 (eg. `/Users/xxx/Documents/Github/FUN/flomo/flomo.py`)
+
 
 ### Wox (Windows)
 

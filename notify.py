@@ -3,7 +3,7 @@ import os
 from config import notify_config as nc
 
 icon_path = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'logo-192x192.png')
+    os.path.dirname(os.path.abspath(__file__)), 'media/logo-192x192.png')
 
 
 def notify(title, message,
