@@ -8,5 +8,10 @@ notify_config = {
     'sound': 'Hero',
     'activate': 'com.google.Chrome.app.xxxxxxxx',
     'open': '',  # 如不需打开网页请设置为空字符串 ''
-    'app_path': '/usr/local/Cellar/terminal-notifier/2.0.0/terminal-notifier.app/Contents/MacOS/terminal-notifier',
+    'app_path': '/usr/local/Cellar/terminal-notifier/2.0.0/terminal-notifier.app/Contents/MacOS/terminal-notifier',  # 注意版本号
+}
+
+template = {
+    'path': 'templates/daily.html',
+    'time_format': '%Y%m%d',
 }

@@ -1,9 +1,14 @@
 import requests
-import re
 import json
+import re
+import os
 
-from config import cookies
+from datetime import datetime
+
+from config import cookies, template as tc
 from notify import notify
+
+folder_path = os.path.dirname(os.path.abspath(__file__))
 
 
 class Flomo():
@@ -49,14 +54,26 @@ class Flomo():
 
 if __name__ == '__main__':
     import sys
-    # args = sys.argv[1].split(' ')
-    # notify("test", len(sys.argv))
     flomo = Flomo()
+
     if sys.argv[1] == 'new':
         content = sys.argv[2]
-        response = flomo.new(
-            ''.join([f'<p>{c}</p>' for c in content.split('\n')]))
-        if response.status_code == 200:
-            notify("flomo: new memo", content)
+        if content == 't':
+            # template
+            from datetime import datetime
+            today = datetime.now().strftime(tc['time_format'])
+
+            with open(os.path.join(folder_path, tc['path']), 'r') as f:
+                content = f.read()
+            response = flomo.new(content.format(today))
+            if response.status_code == 200:
+                notify("flomo: memo template", today)
+            else:
+                notify("🚨 flomo Error", response)
         else:
-            notify("🚨 flomo Error", response)
+            response = flomo.new(
+                ''.join([f'<p>{c}</p>' for c in content.split('\n')]))
+            if response.status_code == 200:
+                notify("flomo: new memo", content)
+            else:
+                notify("🚨 flomo Error", response)
