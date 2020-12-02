@@ -13,9 +13,11 @@
 
 ## Usage 使用
 
+将 [`config_sample.py`](./config_sample.py) 更名为 `config.py`
+
 ### Cookies
 
-将 [`config_sample.py`](./config_sample.py) 更名为 `config.py`
+如图配置 cookies
 
 <p align="center">
   <a href="#"><img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/df9f58b6-0e3d-4bc4-86fa-0140afa6c203/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201201%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201201T165601Z&X-Amz-Expires=86400&X-Amz-Signature=838775cb2a76b8e8e496931c1d0b20cc3347b0d713c7b6d5ff1e852adb83c510&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" width="80%"/></a>
