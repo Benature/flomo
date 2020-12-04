@@ -27,7 +27,7 @@ def get_xyz(url):
 
     url_clip = url.split('?')[0]
     content = f'''[<strong><u>{title}</u></strong>]({url_clip} ) #podcaster/{podcaster}
-    #播客/
+    #
     '''
     return content, title
 

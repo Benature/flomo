@@ -5,6 +5,8 @@ cookies = {
 }
 
 notify_config = {
+    'method': 'terminal-notifier',
+    # 如果 method 不是 terminal-notifier，不必做以下配置
     'sound': 'Hero',
     'activate': 'com.google.Chrome.app.xxxxxxxx',
     'open': '',  # 如不需打开网页请设置为空字符串 ''
