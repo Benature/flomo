@@ -2,9 +2,9 @@
 
 # flomo 浮墨
 
-[![PyPI](https://img.shields.io/pypi/v/autolatex)](https://pypi.org/project/flomo/)
+[![PyPI](https://img.shields.io/pypi/v/flomo)](https://pypi.org/project/flomo/)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/flomo)
-[![GitHub stars](https://img.shields.io/github/stars/Benature/AutoLaTeX)](https://github.com/Benature/flomo)
+[![GitHub stars](https://img.shields.io/github/stars/Benature/flomo)](https://github.com/Benature/flomo)
 
 一个非官方的 API python 玩具盒
 
