@@ -59,7 +59,7 @@ def notify(title, message, subtitle='',
     sysstr = platform.system()
 
     if sysstr == 'Darwin':  # macOS
-        print('macOS notification')
+        # print('macOS notification')
         if method == 'terminal-notifier':
             '''https://github.com/julienXX/terminal-notifier'''
 
