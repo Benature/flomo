@@ -1,2 +1,7 @@
-config.py
 __pycache__/
+.vscode/
+build/
+dist/
+flomo.egg-info/
+
+config.py

@@ -1,18 +1,15 @@
+__version__ = '0.0.1'
+
+
+import platform
 import requests
 import json
 import re
 import os
 
-from datetime import datetime
-
-from config import cookies, template as tc
-from notify import notify
-
-folder_path = os.path.dirname(os.path.abspath(__file__))
-
 
 class Flomo():
-    def __init__(self, cookies=cookies):
+    def __init__(self, cookies):
         self.cookies = cookies
         self.session = requests.session()
 
@@ -52,28 +49,37 @@ class Flomo():
         return response
 
 
-if __name__ == '__main__':
-    import sys
-    flomo = Flomo()
+def notify(title, message, subtitle='',
+           sound='Hero',
+           open='https://flomoapp.com/',
+           method='',
+           activate='',
+           icon='https://i.loli.net/2020/12/06/inPGAIkvbyK7SNJ.png',
+           terminal_notifier_path='terminal-notifier'):
+    sysstr = platform.system()
 
-    if sys.argv[1] == 'new':
-        content = sys.argv[2]
-        if content == 't':
-            # template
-            from datetime import datetime
-            today = datetime.now().strftime(tc['time_format'])
+    if sysstr == 'Darwin':  # macOS
+        print('macOS notification')
+        if method == 'terminal-notifier':
+            '''https://github.com/julienXX/terminal-notifier'''
 
-            with open(os.path.join(folder_path, tc['path']), 'r') as f:
-                content = f.read()
-            response = flomo.new(content.format(today))
-            if response.status_code == 200:
-                notify("flomo: memo template", today)
-            else:
-                notify("🚨 flomo Error", response)
+            t = f'-title "{title}"'
+            m = f'-message "{message}"'
+
+            s = f'-subtitle "{subtitle}"'
+            icon = f'-appIcon "{icon}"'
+            sound = f'-sound "{sound}"'
+
+            activate = '' if activate == '' else f'-activate "{activate}"'
+            open = '' if open == '' else f'-open "{open}"'
+
+            cmd = '{} {} '.format(terminal_notifier_path,
+                                  ' '.join([m, t, s, icon, activate, open, sound]))
+            os.system(cmd)
         else:
-            response = flomo.new(
-                ''.join([f'<p>{c}</p>' for c in content.split('\n')]))
-            if response.status_code == 200:
-                notify("flomo: new memo", content)
-            else:
-                notify("🚨 flomo Error", response)
+            os.system(
+                f"""osascript -e 'display notification "{message}" with title "{title}"'""")
+    elif sysstr == "Windows":
+        print('TODO: windows notification')
+    elif sysstr == "Linux":
+        print('TODO: Linux notification')
