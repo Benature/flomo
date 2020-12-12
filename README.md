@@ -2,7 +2,7 @@
 
 # flomo 浮墨
 
-[![PyPI](https://img.shields.io/pypi/v/autolatex)](https://pypi.org/project/flomo/)
+[![PyPI](https://img.shields.io/pypi/v/flomo)](https://pypi.org/project/flomo/)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/flomo)
 [![GitHub stars](https://img.shields.io/github/stars/Benature/AutoLaTeX)](https://github.com/Benature/flomo)
 
