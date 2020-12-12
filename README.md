@@ -1,4 +1,4 @@
-<a href="https://flomoapp.com/"><img src="./flomo/media/logo-192x192.png" height="100" align="right"></a>
+<a href="https://flomoapp.com/"><img src="https://raw.githubusercontent.com/Benature/flomo/main/flomo/media/logo-192x192.png" height="100" align="right"></a>
 
 # flomo 浮墨
 
@@ -6,7 +6,8 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/flomo)
 [![GitHub stars](https://img.shields.io/github/stars/Benature/AutoLaTeX)](https://github.com/Benature/flomo)
 
-一个非官方的 API python 玩具盒
+一个非官方的 API python 玩具盒  
+即将支持官方 API 👀
 
 > *prefer python3.7+*  
 > 欢迎 Star 🌟、Fork 🍴、Issue 💬、PR. 一起让 flomo 用的更加得心应手
@@ -21,5 +22,5 @@ pip install -U flomo
 
 ## Relative Project 相关项目
 
-- workflow: [flomo workflow](https://github.com/Benature/flomo-workflow)
-- npm: [flomo api helper](https://github.com/geekdada/flomo-api-helper)
+- workflow: [Benature/flomo workflow](https://github.com/Benature/flomo-workflow)
+- npm: [geekdada/flomo api helper](https://github.com/geekdada/flomo-api-helper)
