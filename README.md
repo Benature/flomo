@@ -18,6 +18,12 @@
 pip install -U flomo
 ```
 
+```python
+import flomo
+client = flomo.Flomo(api='https://flomoapp.com/xxxxxAPIxxxx')
+client.new('hello flomo')
+```
+
 相关 workflow 示例可参考 [flomo workflow](https://github.com/Benature/flomo-workflow)
 
 ## Relative Project 相关项目

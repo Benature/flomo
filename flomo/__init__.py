@@ -1,4 +1,4 @@
-__version__ = '0.0.2-alpha'
+__version__ = '0.0.3-alpha'
 
 
 import platform
@@ -16,22 +16,48 @@ class Flomo():
         self.api = api
         self.cookies = cookies
         self.session = requests.session()
+        if cookies:
+            cookies_tmp = self.cookies['Hm'] + \
+                '; XSRF-TOKEN=' + self.cookies['XSRF-TOKEN'] + \
+                '; flomo_session='+self.cookies['flomo_session']
+            self.headers = {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'Cookie': cookies_tmp,
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-XSRF-TOKEN': self.cookies['XSRF-TOKEN'],
+            }
+        else:
+            self.headers = None
 
-    def get(self):
+    def get(self, tag=''):
         '''get all memo'''
         if self.cookies is not None:
-            headers = {
-                'cookie': self.cookies['Hm'],
-                'X-Requested-With': 'XMLHttpRequest',
-            }
-            data = {}
-            response = self.session.get('https://flomoapp.com/api/memo/',
-                                        headers=headers, json=data)
+            # headers = {
+            #     'cookie': self.cookies['Hm'],
+            #     'X-Requested-With': 'XMLHttpRequest',
+            # }
+            if tag:
+                url = f'https://flomoapp.com/api/memo/?tag={tag.strip("#")}'
+            else:
+                url = 'https://flomoapp.com/api/memo/'
+            response = self.session.get(url, headers=self.headers, json={})
             # response.encoding = 'utf-8'
             # get_cookies = response.headers['Set-Cookie']
             return json.loads(response.text)
         else:
             print('this method is not supported officially yet.')
+
+    def update(self, slug, content, file_ids=[], parent_memo_slug=None, source='web'):
+        '''update a memo'''
+        payload = {
+            'content': content,
+            'file_ids': file_ids,
+            'parent_memo_slug': parent_memo_slug,
+            'source': source,
+        }
+        response = self.session.put(f'https://flomoapp.com/api/memo/{slug}/',
+                                    headers=self.headers, json=payload)
+        return response
 
     def new(self, content, parent_memo_id=None, file_ids=[], source='web', method='api'):
         '''put a new memo
@@ -51,17 +77,9 @@ class Flomo():
                 "parent_memo_id": parent_memo_id,
                 "source": source
             }
-            cookies_tmp = self.cookies['Hm'] + \
-                '; XSRF-TOKEN=' + self.cookies['XSRF-TOKEN'] + \
-                '; flomo_session='+self.cookies['flomo_session']
-            headers = {
-                'Content-Type': 'application/json;charset=UTF-8',
-                'Cookie': cookies_tmp,
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-XSRF-TOKEN': self.cookies['XSRF-TOKEN'],
-            }
+
             response = self.session.put('https://flomoapp.com/api/memo/',
-                                        headers=headers, json=payload)
+                                        headers=self.headers, json=payload)
         return response
 
 
