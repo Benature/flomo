@@ -12,6 +12,8 @@
 > *prefer python3.7+*  
 > 欢迎 Star 🌟、Fork 🍴、Issue 💬、PR. 一起让 flomo 用的更加得心应手
 
+最新版在 dev 分支
+
 ## Usage 使用
 
 ```shell
