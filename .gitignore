@@ -5,3 +5,4 @@ dist/
 flomo.egg-info/
 
 config.py
+*.ipynb

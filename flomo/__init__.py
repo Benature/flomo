@@ -1,94 +1,99 @@
-__version__ = '0.0.3-alpha'
-
+__version__ = '0.0.5-alpha'
 
 import platform
 import requests
-import json
-import re
 import os
+import hashlib
+import requests
+from typing import Any, List, Optional, Dict
+from datetime import datetime
+from bs4 import BeautifulSoup
 
 
-class Flomo():
-    def __init__(self, api=None, cookies=None):
-        if api is None and cookies is None:
-            raise Exception('please input api or cookies')
+class Flomo:
 
-        self.api = api
-        self.cookies = cookies
-        self.session = requests.session()
-        if cookies:
-            cookies_tmp = self.cookies['Hm'] + \
-                '; XSRF-TOKEN=' + self.cookies['XSRF-TOKEN'] + \
-                '; flomo_session='+self.cookies['flomo_session']
-            self.headers = {
-                'Content-Type': 'application/json;charset=UTF-8',
-                'Cookie': cookies_tmp,
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-XSRF-TOKEN': self.cookies['XSRF-TOKEN'],
-            }
-        else:
-            self.headers = None
+    def __init__(self, authorization):
+        self.token = authorization
+        self.limit = 200  # memo数量上限
+        self.url_updated = "https://flomoapp.com/api/v1/memo/updated/"
+        self.salt = "dbbc3dd73364b4084c3a69346e0ce2b2"
+        self.success_code = 0
 
-    def get(self, tag=''):
-        '''get all memo'''
-        if self.cookies is not None:
-            # headers = {
-            #     'cookie': self.cookies['Hm'],
-            #     'X-Requested-With': 'XMLHttpRequest',
-            # }
-            if tag:
-                url = f'https://flomoapp.com/api/memo/?tag={tag.strip("#")}'
-            else:
-                url = 'https://flomoapp.com/api/memo/'
-            response = self.session.get(url, headers=self.headers, json={})
-            # response.encoding = 'utf-8'
-            # get_cookies = response.headers['Set-Cookie']
-            return json.loads(response.text)
-        else:
-            print('this method is not supported officially yet.')
-
-    def update(self, slug, content, file_ids=[], parent_memo_slug=None, source='web'):
-        '''update a memo'''
-        payload = {
-            'content': content,
-            'file_ids': file_ids,
-            'parent_memo_slug': parent_memo_slug,
-            'source': source,
+    def _get_params(self, params: dict):
+        params_sorted = {
+            "limit": self.limit,
+            "tz": "8:0",
+            "timestamp": str(int(datetime.now().timestamp())),
+            "api_key": "flomo_web",
+            "app_version": "2.0"
         }
-        response = self.session.put(f'https://flomoapp.com/api/memo/{slug}/',
-                                    headers=self.headers, json=payload)
-        return response
+        latest_slug = params.get("latest_slug", "")
+        latest_updated_at = params.get("latest_updated_at", 0)
+        if latest_slug and latest_updated_at:
+            params_sorted.update({
+                "latest_slug": latest_slug,
+                "latest_updated_at": latest_updated_at
+            })
 
-    def new(self, content, parent_memo_id=None, file_ids=[], source='web', method='api'):
-        '''put a new memo
-        content: memo content
-        method: `api` or `cookies`, determine the method to send the new memo
+        # 排序并生成签名
+        param_str = "&".join(
+            [f"{k}={v}" for k, v in sorted(params_sorted.items())])
+        sign = hashlib.md5((param_str + self.salt).encode("utf-8")).hexdigest()
+        params_sorted["sign"] = sign
 
-        return response'''
-        if self.api is not None and method == 'api':
-            response = self.session.post(
-                self.api,
-                headers={'Content-Type': 'application/json'},
-                json={'content': content})
-        else:
-            payload = {
-                "content": content,
-                "file_ids": file_ids,
-                "parent_memo_id": parent_memo_id,
-                "source": source
+        return params_sorted
+
+    def request(self, params: Optional[dict] = None):
+        headers = {"authorization": self.token}
+        resp = requests.get(self.url_updated,
+                            params=self._get_params(params or {}),
+                            headers=headers)
+        data = resp.json()
+        if data["code"] != self.success_code:
+            raise Exception(f"flomo request error: {data}")
+        return data.get("data", []) or []
+
+    def get_all_memos(self, params: Optional[dict] = None) -> List:
+        """inspired by https://github.com/raoooool/flomo-reminder"""
+        memos = self.request(params)
+        if len(memos) >= self.limit:
+            _updated_at = int(
+                datetime.fromisoformat(memos[-1]["updated_at"]).timestamp())
+            _params = {
+                "latest_slug": memos[-1]["slug"],
+                "latest_updated_at": _updated_at
             }
+            return memos + self.get_all_memos(_params)
+        else:
+            return memos
 
-            response = self.session.put('https://flomoapp.com/api/memo/',
-                                        headers=self.headers, json=payload)
-        return response
+
+class Parser:
+
+    def __init__(self, data: Dict):
+        self.data = data
+        for key, value in self.data.items():
+            setattr(self, key, value)
+
+    @property
+    def text(self):
+        soup = BeautifulSoup(self.content, "lxml")
+        plain_text = soup.get_text(separator='\n', strip=True)
+        return plain_text
+
+    @property
+    def url(self):
+        return "https://v.flomoapp.com/mine/?memo_id=" + self.slug
 
 
-def notify(title, message, subtitle='',
+def notify(title,
+           message,
+           subtitle='',
            sound='Hero',
            open='https://flomoapp.com/',
            method='',
            activate='',
-           icon='https://i.loli.net/2020/12/06/inPGAIkvbyK7SNJ.png',
+           icon='https://flomoapp.com/images/logo-192x192.png',
            terminal_notifier_path='terminal-notifier'):
     sysstr = platform.system()
 
@@ -107,12 +112,14 @@ def notify(title, message, subtitle='',
             activate = '' if activate == '' else f'-activate "{activate}"'
             open = '' if open == '' else f'-open "{open}"'
 
-            cmd = '{} {} '.format(terminal_notifier_path,
-                                  ' '.join([m, t, s, icon, activate, open, sound]))
+            cmd = '{} {} '.format(
+                terminal_notifier_path,
+                ' '.join([m, t, s, icon, activate, open, sound]))
             os.system(cmd)
         else:
             os.system(
-                f"""osascript -e 'display notification "{message}" with title "{title}"'""")
+                f"""osascript -e 'display notification "{message}" with title "{title}"'"""
+            )
     elif sysstr == "Windows":
         print('TODO: windows notification')
     elif sysstr == "Linux":

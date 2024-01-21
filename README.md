@@ -6,7 +6,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/flomo)
 [![GitHub stars](https://img.shields.io/github/stars/Benature/flomo)](https://github.com/Benature/flomo)
 
-一个非官方的 API python 玩具盒  （包括支持官方 API） 👀
+一个非官方的 API python 玩具盒 👀
 
 > *prefer python3.7+*  
 > 欢迎 Star 🌟、Fork 🍴、Issue 💬、PR. 一起让 flomo 用的更加得心应手
@@ -20,26 +20,20 @@ pip install -U flomo
 ```
 
 ```python
-import flomo
-client = flomo.Flomo(api='https://flomoapp.com/xxxxxAPIxxxx')
-client.new('hello flomo')
+from flomo import Flomo, Parser
+authorization = "Bearer xxxxxxxxxxx"
+flomo = Flomo(authorization)
+memos = flomo.get_all_memos()
+
+memo = Parser(memos[-1])
+print(memo.text) # memo 纯文本
+print(memo.url)  # memo 链接
+print(memo.tags)
 ```
 
-相关 workflow 示例可参考 [flomo workflow](https://github.com/Benature/flomo-workflow)
+`authorization` 是用户 flomo 登录后获取的 token，可在浏览器的开发者工具中查看。
 
-```python
-def get(self, tag=''):
-    '''get all memo'''
-
-def update(self, slug, content, file_ids=[], parent_memo_slug=None, source='web'):
-    '''update a memo'''
-
-def new(self, content, parent_memo_id=None, file_ids=[], source='web', method='api'):
-    '''put a new memo
-    @content: memo content
-    @method: `api` or `cookies`, determine the method to send the new memo
-    return response'''
-```
+如有疑问，欢迎 issue。
 
 
 ## Relative Project 相关项目
