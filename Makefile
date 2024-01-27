@@ -1,7 +1,7 @@
-version=0.0.5a0
+version=0.0.4a0
 
 prepare:
-	pip install twine
+	pip install -r requirements.txt
 
 clean:
 	rm -rf ./dist

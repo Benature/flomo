@@ -35,6 +35,13 @@ print(memo.tags)
 
 如有疑问，欢迎 issue。
 
+## Local Install 本地安装
+
+```shell
+git clone https://github.com/Benature/flomo.git
+make all
+```
+
 
 ## Relative Project 相关项目
 

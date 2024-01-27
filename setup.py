@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
 import setuptools
-import pathlib
 import ast
-import typing as ty
+from pathlib import Path
+from typing import List
 
 REQUIREMENTS_SPEC = 'requirements.txt'
 PACKAGE_ENTRY = 'flomo'
@@ -12,8 +12,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 
-def read_requirements() -> ty.List[str]:
-    p = pathlib.Path(__file__).parent / REQUIREMENTS_SPEC
+def read_requirements() -> List[str]:
+    p = Path(__file__).parent / REQUIREMENTS_SPEC
     with open(str(p), 'r', encoding='utf-8') as f:
         rows = f.readlines()
 
@@ -32,7 +32,7 @@ def read_requirements() -> ty.List[str]:
 
 
 def get_version() -> str:
-    p = pathlib.Path(__file__).parent / PACKAGE_ENTRY / '__init__.py'
+    p = Path(__file__).parent / PACKAGE_ENTRY / '__init__.py'
 
     version_row = None
     with open(str(p), 'r', encoding='utf-8') as f:
@@ -74,7 +74,6 @@ setuptools.setup(
     ),
     python_requires='>=3.7',
 )
-
 '''
 pip uninstall flomo -y
 rm -rf ./dist
